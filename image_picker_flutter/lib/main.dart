@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 
 void main() {
   runApp(const MyApp());
@@ -50,9 +51,18 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  final ImagePicker _picker = ImagePicker();
   File? _image;
-  chooseImages(){
+  chooseImages() async { // 讀圖片需要時間，所以要用 async
+    // Pick an image.
+    final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
+    // source: 來源
+    if(image != null){
+      setState(() {
+        _image = File(image.path);
+      });
 
+    }
   }
   captureImages(){
 
