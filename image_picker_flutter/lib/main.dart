@@ -64,8 +64,16 @@ class _MyHomePageState extends State<MyHomePage> {
 
     }
   }
-  captureImages(){
+  captureImages() async {
+    // Pick an image.
+    final XFile? image = await _picker.pickImage(source: ImageSource.camera);
+    // source: 來源
+    if(image != null){
+      setState(() {
+        _image = File(image.path);
+      });
 
+    }
   }
   @override
   Widget build(BuildContext context) {
