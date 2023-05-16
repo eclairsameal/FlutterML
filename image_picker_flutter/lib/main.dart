@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 
 void main() {
@@ -48,6 +50,15 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  File? _image;
+
+  chooseImages(){
+
+  }
+
+  captureImages(){
+
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -83,7 +94,13 @@ class _MyHomePageState extends State<MyHomePage> {
           // horizontal).
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-
+              _image != null?Image.file(_image!):Icon(Icons.image, size: 150,),
+            //當沒有圖片載入時顯示image icon
+              ElevatedButton(onPressed: (){  // 按下按鈕時
+                chooseImages();
+              },onLongPress: (){  // 長按按鈕時
+                captureImages();
+              }, child: Text("Choose/ Capture"))
           ],
         ),
       ),
