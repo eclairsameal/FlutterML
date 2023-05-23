@@ -4,6 +4,7 @@ import 'dart:math';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:google_mlkit_text_recognition/google_mlkit_text_recognition.dart';
 
 void main() {
   runApp(MyHomePage());
@@ -19,19 +20,20 @@ class _MyHomePageState extends State<MyHomePage> {
   File? _image;
   String result = '';
   late ImagePicker imagePicker;
+  dynamic textRecognizer;  // 文字識別器變數
 
 
   @override
   void initState() {
-    // TODO: implement initState
+    // implement initState
     super.initState();
     imagePicker = ImagePicker();
 
-    //TODO initialize detector
-
+    // initialize detector 文字識別器 預設是檢測英文
+    textRecognizer = TextRecognizer(script: TextRecognitionScript.latin);
   }
 
-  _imgFromCamera() async {
+  _imgFromCamera() async {  // 用相機拍攝圖片
     XFile? pickedFile = await imagePicker.pickImage(source: ImageSource.camera);
     File image = File(pickedFile!.path);
     setState(() {
@@ -42,7 +44,7 @@ class _MyHomePageState extends State<MyHomePage> {
     });
   }
 
-  _imgFromGallery() async {
+  _imgFromGallery() async {  // 從圖庫中選擇圖像
     XFile? pickedFile =
     await imagePicker.pickImage(source: ImageSource.gallery);
     File image = File(pickedFile!.path);
@@ -54,8 +56,28 @@ class _MyHomePageState extends State<MyHomePage> {
     });
   }
 
-  //TODO perform text recognition
-  doTextRecognition() async {
+  // perform text recognition
+  doTextRecognition() async { // 文字識別前先將圖片轉成其他格式
+    InputImage inputImage = InputImage.fromFile(_image!);
+    final RecognizedText recognizedText = await textRecognizer.processImage(inputImage);
+
+    String text = recognizedText.text;
+    setState(() {
+      result = text;result = text;
+    });
+    for (TextBlock block in recognizedText.blocks) {
+      final Rect rect = block.boundingBox;
+      final List<Point<int>> cornerPoints = block.cornerPoints;
+      final String text = block.text;
+      final List<String> languages = block.recognizedLanguages; // 如果有多語言
+
+      for (TextLine line in block.lines) {
+        // Same getters as TextBlock
+        for (TextElement element in line.elements) {
+          // Same getters as TextBlock
+        }
+      }
+    }
   }
 
   @override
